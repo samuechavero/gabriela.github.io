@@ -1,29 +1,45 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { PlayCircle, Zap, TrendingDown, Heart, X, CheckCircle2 } from "lucide-react";
+import { PlayCircle, Zap, TrendingDown, Heart, X, CheckCircle2, FileText, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { supabase } from "@/lib/supabase";
 
 function App() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isGated, setIsGated] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: "", phone: "" });
 
-  const handleModalClose = () => {
-    setIsModalOpen(false);
+  const handleUnlock = () => {
+    setIsGated(false);
     setTimeout(() => {
       setIsSubmitted(false);
       setFormData({ name: "", phone: "" });
     }, 300);
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    setTimeout(() => {
-      handleModalClose();
-    }, 2500);
+    
+    try {
+      const { error } = await supabase
+        .from("leads")
+        .insert([{ 
+          nombre: formData.name, 
+          telefono: formData.phone 
+        }]);
+
+      if (error) {
+        console.log("Error de Supabase:", error);
+        throw error;
+      }
+      
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Error al registrar lead:", error);
+      alert("Hubo un error al registrar tus datos. Por favor intenta de nuevo.");
+    }
   };
 
   const fadeInUp = {
@@ -32,7 +48,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans">
+    <div className={`min-h-screen bg-background text-foreground font-sans ${isGated ? "h-screen overflow-hidden" : ""}`}>
       {/* SECTION 1: HERO */}
       <section className="pt-24 pb-16 px-6 sm:px-12 md:px-24 max-w-7xl mx-auto flex flex-col items-center text-center">
         <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
@@ -46,11 +62,19 @@ function App() {
         </motion.div>
 
         <motion.div 
-          className="w-full max-w-3xl aspect-video bg-primary/90 rounded-xl shadow-xl flex items-center justify-center mb-10 cursor-pointer hover:bg-primary transition-colors relative overflow-hidden group"
+          className="w-full max-w-3xl aspect-video bg-black rounded-xl shadow-2xl flex items-center justify-center mb-10 relative overflow-hidden group"
           initial="hidden" animate="visible" variants={fadeInUp} transition={{ delay: 0.2 }}
         >
-          <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
-          <PlayCircle className="w-20 h-20 text-white z-10 opacity-90 group-hover:scale-110 transition-transform duration-300" />
+          <video 
+            className="w-full h-full object-cover rounded-xl"
+            controls
+            playsInline
+            preload="metadata"
+            data-testid="video-vsl"
+          >
+            <source src="./VSL.mp4" type="video/mp4" />
+            Tu navegador no soporta el formato de video.
+          </video>
         </motion.div>
 
         <motion.div initial="hidden" animate="visible" variants={fadeInUp} transition={{ delay: 0.4 }}>
@@ -76,7 +100,7 @@ function App() {
                   <div className="space-y-4">
                     <div className="w-full h-px bg-white/40"></div>
                     <div className="w-full h-px bg-white/40"></div>
-                    <h3 className="font-serif text-3xl text-white font-bold leading-tight mt-4">
+                    <h3 className="font-serif text-lg sm:text-xl text-white font-bold leading-tight mt-2 pb-2">
                       Guía de Transformación Integral
                     </h3>
                   </div>
@@ -95,13 +119,17 @@ function App() {
               <p className="text-lg text-muted-foreground leading-relaxed">
                 Descarga mi guía gratuita y comienza a entender las señales ocultas que tu cuerpo te envía. Descubre cómo tus emociones, hormonas y metabolismo están conectados.
               </p>
-              <Button 
-                onClick={() => setIsModalOpen(true)} 
-                className="bg-primary hover:bg-primary/90 text-white px-8 py-6 rounded-full text-lg mt-4 w-full sm:w-auto"
-                data-testid="button-open-modal"
-              >
-                Descargar Ebook Gratuito
-              </Button>
+              <div className="pt-2">
+                <a 
+                  href="./guia-de-transformacion-integral.pdf" 
+                  download 
+                  target="_blank"
+                  className="inline-flex items-center justify-center gap-3 bg-primary text-primary-foreground px-8 py-4 rounded-full text-lg font-medium shadow-lg hover:shadow-xl hover:bg-primary/90 hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto overflow-hidden group"
+                >
+                  <Download className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                  Descargar Ebook Gratis
+                </a>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -115,8 +143,13 @@ function App() {
             initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp}
           >
             <div className="w-full md:w-1/3 flex justify-center md:justify-end">
-              <div className="w-48 h-48 rounded-full bg-primary flex items-center justify-center shadow-xl border-4 border-white">
-                <span className="font-serif text-8xl text-white font-light">G</span>
+              <div className="w-64 h-64 rounded-full overflow-hidden shadow-2xl border-4 border-white bg-muted relative group">
+                <img 
+                  src="./foto.png" 
+                  alt="Dra. Gabriela Gonzalez" 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
               </div>
             </div>
             
@@ -203,23 +236,17 @@ function App() {
         </div>
       </footer>
 
-      {/* MODAL */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+      {/* MODAL / GATING BARRIER */}
+      {isGated && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4 backdrop-blur-md transition-opacity duration-500">
           <motion.div 
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.4 }}
             className="bg-card rounded-2xl shadow-2xl max-w-md w-full overflow-hidden relative"
-            data-testid="modal-ebook"
+            data-testid="modal-ebook-gated"
           >
-            <button 
-              onClick={handleModalClose}
-              className="absolute right-4 top-4 text-muted-foreground hover:text-foreground transition-colors p-1"
-              data-testid="button-close-modal"
-            >
-              <X className="w-5 h-5" />
-            </button>
             
             <div className="p-8">
               {!isSubmitted ? (
@@ -256,7 +283,7 @@ function App() {
                       />
                     </div>
                     <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white rounded-xl py-6 text-lg mt-4" data-testid="button-submit-form">
-                      Acceder al Ebook y Video
+                      Acceder a la Guía Ahora
                     </Button>
                   </form>
                 </>
@@ -270,7 +297,12 @@ function App() {
                     <CheckCircle2 className="w-20 h-20 text-primary mb-2" />
                   </motion.div>
                   <h3 className="font-serif text-2xl text-foreground">¡Gracias!</h3>
-                  <p className="text-muted-foreground">Tu acceso ha sido enviado. Revisa tu dispositivo.</p>
+                  <Button 
+                    onClick={handleUnlock} 
+                    className="w-full bg-primary hover:bg-primary/90 text-white rounded-xl py-6 text-lg mt-4"
+                  >
+                    Acceder a la Guía Ahora
+                  </Button>
                 </div>
               )}
             </div>
