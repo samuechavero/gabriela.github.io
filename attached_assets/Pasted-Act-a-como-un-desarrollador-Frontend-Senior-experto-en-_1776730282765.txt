@@ -1,0 +1,54 @@
+Actúa como un desarrollador Frontend Senior experto en React, Tailwind CSS y UX/UI para landing pages de alta conversión. Tu tarea es construir una página web tipo VSL (Video Sales Letter) en un solo archivo (o estructura estándar de Vite/Next.js) para la Dra. Gabriela Gonzalez, especialista en Medicina Integral y enfoque PINE.
+
+### 🎨 GUÍA DE ESTILO Y DISEÑO
+- **Paleta de Colores:** - Color principal (Backgrounds y botones clave): Un tono terracota/rosa empolvado elegante (Usa `#B58B7D` o `bg-[#B58B7D]`).
+  - Color de fondo general: Blanco roto o crema muy suave (`#FAFAFA` o `#FFFDFD`) para contrastar.
+  - Color de texto principal: Gris oscuro carbón (`#333333`) para legibilidad, y blanco puro para textos sobre el color principal.
+- **Tipografía:** Usa una fuente Serif elegante para los títulos (como 'Playfair Display' o 'Merriweather') y una Sans-serif limpia para el cuerpo del texto (como 'Inter' o 'Lato').
+- **Estética:** "Old Money", profesional, médica, limpia, minimalista y holística.
+
+### 🏗️ ESTRUCTURA DE LA PÁGINA
+
+Desarrolla las siguientes secciones en orden descendente:
+
+**1. SECCIÓN HERO (VSL)**
+- **Título principal (H1):** "Recupera tu Salud Física y Emocional: Sal del Modo Supervivencia" (Centrado, tipografía Serif).
+- **Subtítulo:** "Descubre cómo el enfoque PINE puede ayudarte a sanar de raíz, regulando tu cuerpo, mente y alma sin soluciones superficiales." (Centrado).
+- **Contenedor de Video (VSL):** Un div centrado con aspecto 16:9, esquinas redondeadas, sombra suave (shadow-lg) y un icono de "Play" en el medio para simular el video.
+- **Botón de WhatsApp:** Debajo del video, un botón grande y llamativo.
+  - Texto: "📲 Hablar con Gabriela por WhatsApp"
+  - Enlace: `https://wa.me/12678085466`
+  - Estilo: Color verde de WhatsApp (`#25D366`) o el color principal de la marca, con hover effect.
+
+**2. SECCIÓN LEAD MAGNET (Ebook)**
+- **Layout:** Flexbox/Grid dividido en dos columnas (1 columna en móvil).
+- **Columna Izquierda:** Un placeholder o mockup de un Ebook con diseño elegante.
+- **Columna Derecha:** - Título: "Empieza tu transformación hoy"
+  - Descripción: "Descarga mi guía gratuita y comienza a entender las señales ocultas que tu cuerpo te envía. Descubre cómo tus emociones, hormonas y metabolismo están conectados."
+  - Botón: "Descargar Ebook" (Color principal `#B58B7D`, texto blanco). Al hacer clic en este botón, DEBE ABRIRSE UN MODAL (Pop-up).
+- **Funcionalidad del Modal:**
+  - Título dentro del modal: "¡Hay un video especial para ti!"
+  - Campos del formulario: "Nombre" y "Número de Teléfono" (inputs con diseño limpio).
+  - Botón de submit: "Acceder al Ebook y Video".
+
+**3. SECCIÓN 'SOBRE MÍ' (Biografía)**
+- **Layout:** Flexbox/Grid con imagen circular o con bordes suaves a la izquierda y texto a la derecha.
+- **Contenido del texto:**
+  - Título: "Conoce a la Dra. Gabriela Gonzalez"
+  - Párrafo 1: "Nací en Córdoba, Argentina. Estudié medicina en la mundialmente reconocida Universidad Nacional de Córdoba y me especialicé en Clínica Médica."
+  - Párrafo 2: "Con posgrados en Psicología Fractal y Psiconeuroinmunoendocrinología (PINE), mi objetivo es lograr una SALUD INTEGRAL, reconociéndonos como un todo: Cuerpo, Mente y Alma."
+  - Párrafo 3: "Hoy vivo en Philadelphia, EE. UU., y mi misión es acompañarte a crear hábitos saludables y sostenibles para que recuperes tu calidad de vida."
+
+**4. SECCIÓN EXTRA DE VALOR: "El Modo Supervivencia" (Información PINE)**
+- **Fondo:** Color principal `#B58B7D` con texto en blanco para resaltar.
+- **Título:** "¿Haces de todo y sigues igual?"
+- **Grid de 3 columnas con iconos:**
+  - Columna 1: *Cansancio Crónico* - "Tu cerebro interpreta peligro y prioriza guardar energía."
+  - Columna 2: *Bloqueo Metabólico* - "El cortisol y la insulina se disparan, bloqueando tu metabolismo."
+  - Columna 3: *Solución Integral* - "No es falta de voluntad. Es un bloqueo hormonal-emocional que abordamos uniendo biología, pensamiento y emoción."
+
+### ⚙️ REQUISITOS TÉCNICOS
+- Asegúrate de que la página sea 100% Responsive (Mobile-first).
+- Implementa el Modal usando el estado de React (`useState`).
+- Usa íconos de `lucide-react` (ej. WhatsApp, Play, Book, Check).
+- Escribe código limpio, modular y listo para producción.
